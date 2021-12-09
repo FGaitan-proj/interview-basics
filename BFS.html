@@ -1,0 +1,287 @@
+<html lang="en">
+<body style="background-color:#E9B48A;" >
+  <strong>Graph Search</strong>
+  <p>This page is designed to take a Name and a number to create a graph.
+    You can output edges and create more than one graph.
+    If you want to specify the changes to a specific graph, then you just
+    need to change the input for Graph Name and then the buttons that
+    adjust for edges should also change.
+  </p>
+  Label: <input type="text" id="GName" value="Simple"/>
+  <br> Nodes: <input type="number" id="GNode" value="5" min="1"/>
+
+  <br>
+  <p>
+  <button onclick="MakeGraph()">Make Graph</button>
+  </p>
+  <div id="EdgesInput" style="display:none">
+    Edges:
+      <input type="number" id="N1" min="0" value="0"/>
+      <input type="number" id="N2" min="0" value="0"/>
+      <button id="AEdges" onclick="AddEdges()">
+        Add Edges
+      </button>
+      <button id="REdges" onclick="RemoveEdges()">
+        Remove Edges
+      </button>
+      <p>
+      <button onclick="StartBFS()"> Start BreadthFirstSearch </button>
+      </p>
+  </div>
+
+  <div id="BFSlabel" style="display:none">
+    <p>
+      Input the Label and the source node to produce the shortest
+      distance between the source node and all other nodes.
+    </p>
+    Graph Label:
+      <input type="text" id="BFSgraph"/>
+    <br>
+    Source Node:
+      <input type="number" id="BFSsource" min="0" value="0"/>
+
+    <button onclick="BFSsearch()"> Search </button>
+  </div>
+
+<script>
+  class SimpleGraph {
+    // An undirected simple graph with n nodes and e edges
+    constructor(n){
+      this.nodes = n; //nodes
+      this.edges = 0; //edges
+      this.adj_nodes = []; //an array that maps node to list of adjacent nodes
+      var i;
+      for (i=0; i<n; i+=1){
+        this.adj_nodes.push([]);
+      }
+    }
+    nodes_adj(u){
+      //u: int
+      //precondition: 0<= u < this.edges
+      //returns: arrary of adjacent nodes to u
+      return this.adj_nodes[u]
+    }
+    is_edge(u,v){
+      //u, v: int
+      //precondition: 0 <= u,v < this.edges
+      //returns: bool, True iff an edge (u,v) exists
+      var ls = this.adj_nodes[u];
+      var i;
+      for (i=0;i<ls.length; i+=1){
+        if (v == ls[i]){
+            return true;
+        }
+      }
+      return false;
+    }
+    add_edge(u,v){
+      //u,v: int
+      //precondition: 0 <= u,v < this.edges
+      //if u!=v and they are not already connected, adds an edge (u,v)
+      if (u != v && !this.is_edge(u,v)){
+        this.edges+=1;
+        this.adj_nodes[u].push(v); // adds (u,v)
+        this.adj_nodes[v].push(u); // adds (v,u)
+      }
+    }
+    remove_edge(u,v){
+      //u, v: int
+      //precondition: 0 <= u,v < this.edges
+      //Removes the undirected edge (u,v) is it exists
+      if (this.is_edge(u, v)){
+        this.edges-=1;
+        this.adj_nodes[u].pop(v);
+        this.adj_nodes[v].pop(u);
+      }
+    }
+  }
+  function BreadthFirstSearch(graph,s){
+    //graph: SimpleGraph ; s: int or source node
+    //returns: list of distances, dist[i] = length of shortest path
+    //from s to i along the totals paths of that length
+    let Nodes = graph.nodes;
+    let Dist = [];
+    let i;
+    for (i=0;i<Nodes;i+=1){
+      Dist.push([-1,0]);
+    }
+    Dist[s] = [0,1];
+    let Que = [s];
+    do {
+      let v = Que.pop();
+      let ls = graph.adj_nodes[v];
+      let j;
+      for (j=0;j<ls.length; j+=1){
+        let w = ls[j];
+        let w1,w2,v1,v2;
+        [w1,w2] = Dist[w];
+        [v1,v2] = Dist[v];
+        if (w1 == -1) {
+          let w1 = v1 + 1;
+          Dist[w] = [w1,v2];
+          Que.push(w);
+        }
+        if (w1 == v1 + 1){
+          Dist[w] = [w1,v2+w2];
+        }
+      }
+    } while (Que.length != 0);
+    return Dist
+  }
+  function count_shortest_paths(graph,s){
+    // graph: Graph; s: int, source node
+    // returns: a list xs where xs[i] is the number of shortest paths
+    // from s to i
+    let dist = BreadthFirstSearch(graph,s);
+    let paths = [];
+    while (dist.length != 0){
+      let [a,b] = dist.pop();
+      paths.push(b);
+    }
+    return paths
+  }
+  this.graphdict = {};
+
+  var colors = ["#E49175;","#DF8C70;", "#E9967A;", "#DA876B;",
+  "#D58266;", "#D07D61;", "#CB785C;", "#C67357;", "#C16E52;", "#BC694D;",
+  "#B76448;", "#B25F43;", "#AD5A3E;", "#F5A286;", "#FFAE92;", "#FFBA9E;",
+  "#FFC6AA;", "#FFD2B6;", "#FFDEC2;", "#FFEACE;", "#FFF6DA;", "#FFFFE6;",
+  "#FFFFF2;", "#FFFFFE;", "#FFFFFF;", "#E9C37D;", "#F5CF89;", "#FFDB95;",
+  "#F5A7EB;", "#FFB357;"]
+
+  function random_color(colorArray){
+    let n = Math.floor(Math.random() * colorArray.length);
+    return colors[n]
+  }
+
+  function MakeGraph(){
+    var name = document.getElementById("GName").value;
+    var nodes = document.getElementById("GNode").value;
+    let eInput = document.getElementById("EdgesInput");
+    if (eInput.style.display === "none") {
+        eInput.style.display = "block";
+      }
+    var check = document.getElementById(name);
+    if (check == null){
+      this.graphdict[name] = [new SimpleGraph(nodes), []];
+      let col = random_color(colors);
+      let output = document.createElement("p");
+      output.setAttribute("style","background-color:"+col)
+      let edges = document.createElement("div");
+      edges.setAttribute("id",name);
+      edges.setAttribute("style","background-color:"+col)
+      let n1 = document.getElementById("N1");
+      let n2 = document.getElementById("N2");
+      n1.setAttribute("max",nodes-1);
+      n2.setAttribute("max",nodes-1);
+      let printn = [];
+      let i;
+      for (i=0; i<nodes; i+=1){
+        let n = i.toString();
+        printn.push(" o"+ n.sub());
+      }
+      output.innerHTML = name + " Graph <br>" + printn;
+      document.body.insertBefore(edges,EdgesInput);
+      document.body.insertBefore(output,edges);
+   } else {
+     window.alert("Graph Name already in use");
+   }
+  }
+  function Pr(edges){
+    let printedges = [];
+    let i;
+    for (i=0;i<edges.length;i+=1){
+      let n1 = edges[i][0].toString();
+      let n2 = edges[i][1].toString();
+      printedges.push("o"+n1.sub()+" ---- o"+n2.sub());
+    }
+    return printedges;
+  }
+  function Findindex(Ar,Array){
+    let [e1,e2] = Ar;
+    let i;
+    for (i=0; i<Array.length; i+=1){
+      let [n1,n2] = Array[i];
+      if (e1 == n1 && e2 == n2){
+        return i
+      }
+    } return -1
+  }
+
+  function AddEdges(){
+    let name = document.getElementById("GName").value;
+    let edges = document.getElementById(name);
+    if (edges != null){
+      let n1 = document.getElementById("N1").value;
+      let n2 = document.getElementById("N2").value;
+      let [graph,edges1] = this.graphdict[name];
+      if (n1 != n2 && !graph.is_edge(n1,n2)) {
+        graph.add_edge(n1,n2);
+        edges1.push([n1,n2]);
+        edges.innerHTML = Pr(edges1);
+      }
+    } else {
+      window.alert("Graph Name Not Defined");
+    }
+
+  }
+
+  function RemoveEdges(){
+    let name = document.getElementById("GName").value;
+    let edges = document.getElementById(name);
+    if (edges != null){
+      let n1 = document.getElementById("N1").value;
+      let n2 = document.getElementById("N2").value;
+      let [graph,edges1] = this.graphdict[name];
+      if (n1 != n2 && graph.is_edge(n1,n2)){
+        graph.remove_edge(n1,n2);
+        let index = Findindex([n1,n2],edges1);
+        if (index > -1) {
+          edges1.splice(index, 1);
+        }
+        edges.innerHTML = Pr(edges1);
+      }
+    } else {
+      window.alert("Graph Name Not Defined");
+    }
+  }
+  function StartBFS(){
+    document.getElementById("BFSlabel").style.display = "block";
+    document.getElementById("BFSgraph").value =
+            document.getElementById("GName").value;
+  }
+
+  function sourcetonode(dist){
+    let output = "";
+    let i;
+    for (i=0;i<dist.length;i+=1){
+      if (dist[i][0] != -1){
+        output+= "<br> --> "+i+" has shortest distance: "+dist[i][0]
+      }
+    }
+    return output
+  }
+
+  function BFSsearch(){
+    let gname = document.getElementById("BFSgraph").value;
+    let snode = document.getElementById("BFSsource");
+    if (document.getElementById(name) != null){
+      let [graph,edges1] = this.graphdict[gname];
+      if (snode.value <= graph.nodes) {
+        let dist = BreadthFirstSearch(graph,snode.value);
+        let search_output = document.createElement("p");
+        search_output.innerHTML = gname+" Graph:" + sourcetonode(dist)
+        document.body.appendChild(search_output);
+      }else{
+        window.alert(gname+" does not have node "+snode.value.toString());
+      }
+
+    } else {
+      window.alert("Graph Label Not Defined");
+    }
+
+
+  }
+</script>
+</body>
+</html>
