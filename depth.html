@@ -1,0 +1,52 @@
+<html lang="en">
+<body style="background-color:#999fd4;" >
+  <header>
+    <script type="module" src="graph_simple.js"></script>
+    <script type="module" src="algorithms.js"></script>
+    <script type="module" src="depth.js"></script>
+    <div class="topnav">
+      <a href="index.html">Home</a>
+      <a href="breadth.html">BreadthFirstSearch</a>
+      <a href="depth.html">DepthFirstSearch</a>
+      <a href="binary.html">BinarySearch</a>
+      <a href="quick.html">QuickSort</a>
+      <a href="merge.html">MergeSort</a>
+    </div>
+    <p></p>
+    <h1> Depth First Search Algorithms </h1>
+    <p>
+      On this page and given a constructed graph, we can determine the list of explored nodes from the source node to the goal node. We can also find first the path, length of that path, number of paths from the source to all nodes found by DepthFirstSearch.
+    </p>
+  </header>
+  <strong>Graph Construction</strong> 
+  <br>
+  This page is designed to take a Name and a number to create a graph.
+  You can output edges and create more than one graph.
+  If you want to specify the changes to a specific graph, then you just
+  need to change the input for Label.
+  <p>
+    Label: <input type="text" class="GName" value="Simple" size="10"/>
+    <br> 
+    Nodes: <input type="number" class="GNode" value="5" min="1" max="1000000"/>
+  </p>
+  <p>
+    <button class="make_simplegraph">Make Graph</button>
+    <br>
+    <button class="start_search"> Start DepthFirstSearch </button>
+  </p>
+<style>
+.topnav {
+  background-color: #333;
+  float: right;
+}
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+</style>
+</body>
+</html>
