@@ -1,75 +1,7 @@
-
-//Different random colors for each graph
-var colors = ["#E49175;","#DF8C70;", "#E9967A;", "#DA876B;",
-"#D58266;", "#D07D61;", "#CB785C;", "#C67357;", "#C16E52;", "#BC694D;",
-"#B76448;", "#B25F43;", "#AD5A3E;", "#F5A286;", "#FFAE92;", "#FFBA9E;",
-"#FFC6AA;", "#FFD2B6;", "#FFDEC2;", "#FFEACE;", "#FFF6DA;", "#FFFFE6;",
-"#FFFFF2;", "#FFFFFE;", "#FFFFFF;", "#E9C37D;", "#F5CF89;", "#FFDB95;",
-"#F5A7EB;", "#FFB357;"]
-
-// input: colorArray, array of colors ids
-// returns: a single color id
-const random_color = function (){
-  let n = Math.floor(Math.random() * colors.length);
-  return colors[n]
-}
-
-// input: x,y are arrays of two elements
-// return: true iff x and y both exactly the same elements
-const equiv = function (x,y) {
-    let [a,b] = x;
-    let [c,d] = y;
-    return ((a===c && b===d) || (b===c && a===d))
-}
-  
-// input: x, a variable and xs, an dictionary
-// output: true if x is in xs and false otherwise
-const inobj = function (x,xs) {
-    let ans = false;
-    Object.keys(xs).forEach(element => {
-      if (element === x) {ans = true};
-    });
-    return ans
-}
-  
-// input: x, a variable and xs, an dictionary
-// output: true if x is in xs and false otherwise
-const inarr = function (x,xs) {
-    let ans = false;
-    xs.forEach(element => {
-      if (equiv(element,x)) {ans = true};
-    })
-    return ans  
-}
-  
-//removes an element from an array of ints through regular iteration
-const remove = function (x,ls){
-    let ret = [];
-    let n = ls.length;
-    let once = false;
-    for (let i = 0; i < n; i++) {
-      if ((ls[i] != x) || once) {
-        ret.push(ls[i])
-      } else {
-        once = true;
-      }
-    }
-    return ret
-}
-  
-//removes an two element array from an array depending on the first 
-//element in the two element array through iteration
-const remove2 = function (x,ls){
-    let ret = [];
-    let n = ls.length;
-    for (let i = 0; i < n; i++) {
-      let y = ls[i]
-      if (!equiv(x,y)) {
-        ret.push(ls[i])
-      }
-    }
-    return ret
-}
+import * as A from "./algorithms.js";
+/*
+User Interface aspect of creating an array
+*/
 
 //HTML to start constructing the array
 const array = document.createElement("div");
@@ -138,7 +70,7 @@ element_input.addEventListener("change", (event) => {
 
 //adds a visual to all_arr of a new array
 array_button.addEventListener("click", () => {
-    if (inobj(label, label_ls)) {
+    if (A.inobj(label, label_ls)) {
       //Alerts user the array name is already in use
       window.alert("Array Name already in use");
 
@@ -153,9 +85,10 @@ array_button.addEventListener("click", () => {
       document.body.insertBefore(change_elems,all_arr);
       let arr = document.createElement("div");
       arr.setAttribute("class", label);
-      arr.setAttribute("style","background-color:"+random_color());
+      arr.setAttribute("style","background-color:"+ A.random_color());
 
       //adds text to constructed p tag
+      //TODO add a a select button/ save button?
       arr.innerHTML = `
       <center>
       &emsp;
@@ -187,7 +120,7 @@ array_button.addEventListener("click", () => {
 
 //the functionality of the add element button
 add_button.addEventListener("click", () => {
-    if (inobj(label,label_ls)) {
+    if (A.inobj(label,label_ls)) {
       if (label_ls[label].some(element => element === elem)) {
         window.alert("Please do not repeat elements")
       } else {
@@ -203,11 +136,11 @@ add_button.addEventListener("click", () => {
 
 //the functionality of the remove button
 rem_button.addEventListener("click", () => {
-    if (inobj(label,label_ls)) {
+    if (A.inobj(label,label_ls)) {
 
         let arr = all_arr.querySelector("."+label);
         let elem = arr.querySelector(".elem"+label);
-        label_ls[label] = remove(element,label_ls[label]);
+        label_ls[label] = A.remove1(element,label_ls[label]);
         elem.innerHTML="{"+label_ls[label].length+"} ["+label_ls[label]+"]"
         
     } else {
@@ -215,4 +148,4 @@ rem_button.addEventListener("click", () => {
     }
 })
 
-export {label_ls, all_arr, inobj, change_elems};
+export {label_ls, all_arr, change_elems};
