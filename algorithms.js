@@ -1,7 +1,224 @@
 /*
-Functions that are written in their respective title as well as 
-functions that aid in explanation
+helper functions, new classes, and algorithms
 */ 
+
+//Different random colors for each graph
+var colors = ["#E49175;","#DF8C70;", "#E9967A;", "#DA876B;",
+"#D58266;", "#D07D61;", "#CB785C;", "#C67357;", "#C16E52;", "#BC694D;",
+"#B76448;", "#B25F43;", "#AD5A3E;", "#F5A286;", "#FFAE92;", "#FFBA9E;",
+"#FFC6AA;", "#FFD2B6;", "#FFDEC2;", "#FFEACE;", "#FFF6DA;", "#FFFFE6;",
+"#FFFFF2;", "#FFFFFE;", "#FFFFFF;", "#E9C37D;", "#F5CF89;", "#FFDB95;",
+"#F5A7EB;", "#FFB357;"]
+
+// input: colorArray, array of colors ids
+// returns: a single color id
+const random_color = function (){
+  let n = Math.floor(Math.random() * colors.length);
+  return colors[n]
+}
+
+// input: x,y are arrays of two elements
+// return: true iff x and y both exactly the same elements
+// TODO make it so that its for everything
+const equiv = function (x,y) {
+  let [a,b] = x;
+  let [c,d] = y;
+  return ((a===c && b===d) || (b===c && a===d))
+}
+
+// input: x, a variable and xs, an dictionary
+// output: true if x is in xs and false otherwise
+const inobj = function (x,xs) {
+  let ans = false;
+  Object.keys(xs).forEach(element => {
+    if (element === x) {ans = true};
+  });
+  return ans
+}
+
+// input: x, a variable and xs, an dictionary
+// output: true if x is in xs and false otherwise
+const inarr = function (x,xs) {
+  let ans = false;
+  xs.forEach(element => {
+    if (equiv(element,x)) {ans = true};
+  })
+  return ans  
+}
+
+//removes an element from an array of ints through regular iteration
+const remove = function (x,ls){
+  let ret = [];
+  let n = ls.length;
+  for (let i = 0; i < n; i++) {
+    if (ls[i] != x) {
+      ret.push(ls[i])
+    }
+  }
+  return ret
+}
+
+//removes a single element from an array of ints through regular iteration
+const remove1 = function (x,ls){
+  let ret = [];
+  let n = ls.length;
+  let once = false;
+  for (let i = 0; i < n; i++) {
+    if ((ls[i] != x) || once) {
+      ret.push(ls[i])
+    } else {
+      once = true;
+    }
+  }
+  return ret
+}
+
+//removes an two element array from an array depending on the first 
+//element in the two element array through iteration
+const remove2 = function (x,ls){
+  let ret = [];
+  let n = ls.length;
+  for (let i = 0; i < n; i++) {
+    if (ls[i].shift() != x) {
+      ret.push(ls[i])
+    }
+  }
+  return ret
+}
+
+// An undirected simple graph with n nodes and e edges
+class SimpleGraph {
+  constructor(n){
+    this.nodes = n; //nodes
+    this.edges = []; //edges
+    this.adj_nodes = []; //array that maps node to list of adjacent nodes
+    for (var i=0; i<n; i+=1){
+      this.adj_nodes.push([]);
+    }
+  }
+
+  //returns: total nodes
+  nodes(){
+    return this.nodes;
+  }
+
+  //returns: total edges
+  edges(){
+    return this.edges;
+  }
+
+  //returns: adjacent nodes of v
+  neighbors(v){
+    return this.adj_nodes[v]
+  }
+
+  //u, v: int
+  //precondition: 0 <= u,v < this.nodes
+  //returns: bool, True iff an edge (u,v) exists
+  is_edge(u,v){
+    return this.adj_nodes[u].some(element => element == v);
+  }
+
+  //u,v: int
+  //precondition: 0 <= u,v < this.nodes
+  //if u!=v and they are not already connected, adds an edge (u,v)
+  add_edge(u,v){ 
+    if (u != v && !this.is_edge(u,v)){
+      this.edges.push([u,v]);
+      this.adj_nodes[u].push(v); // adds (u,v)
+      this.adj_nodes[v].push(u); // adds (v,u)
+    }
+  }
+
+  //u, v: int
+  //precondition: 0 <= u,v < this.nodes
+  //Removes the undirected edge (u,v) is it exists
+  remove_edge(u,v){
+    if (this.is_edge(u, v)){
+      this.edges = A.remove2([u,v],this.edges);
+      this.adj_nodes[u] = A.remove1(this.adj_nodes[u], v);
+      this.adj_nodes[v] = A.remove1(this.adj_nodes[v], u);
+    }
+  }
+}
+
+// An undirected weighted graph with n nodes and e edges
+class WeightedGraph {
+  constructor(n){
+    this.nodes = n; //nodes
+    this.edges = 0; //edges
+    this.adj_nodes = []; //array that maps node to list of adjacent nodes
+    for (let i=0; i<n; i+=1){
+      this.adj_nodes.push([]);
+    }
+  }
+  
+  //returns: total nodes
+  nodes(){
+    return this.nodes;
+  }
+
+  //returns: total edges
+  edges(){
+    return this.edges;
+  }
+
+  //returns: adjacent nodes of v
+  neighbors(v){
+    return this.adj_nodes[v]
+  }
+
+  //u, v: int
+  //precondition: 0 <= u,v < this.edges
+  //returns: bool, True iff an edge (u,v) exists
+  is_edge(u,v){
+    var ls = this.adj_nodes[u];
+    for (var i=0;i<ls.length; i+=1){
+      if (v == ls[i].shift()){
+          return true;
+      }
+    }
+    return false;
+  }
+
+  //u, v: int
+  //precondition: 0 <= u,v < this.edges
+  //returns: int, the weight of the edge or undefined
+  weight (u,v){
+    var ls = this.adj_nodes[u];
+    for (var i=0;i<ls.length; i+=1){
+      if (v == ls[i].shift()){
+          return ls[i].pop();
+      }
+    }
+    return undefined;
+  }
+
+  //u,v: int
+  //w: float, edge weight
+  //precondition: 0 <= u,v < this.edges
+  //if u!=v and they are not already connected, adds an edge (u,v)
+  add_edge(u,v, w){ 
+    if (u != v && !this.is_edge(u,v)){
+      this.edges+=1;
+      this.adj_nodes[u].push([v,w]); // adds (u,v)
+      this.adj_nodes[v].push([u,w]); // adds (v,u)
+    }
+  }
+
+  //u, v: int
+  //precondition: 0 <= u,v < this.edges
+  //Removes the undirected edge (u,v) is it exists
+  remove_edge(u,v){
+    if (this.is_edge(u, v)){
+      this.edges-=1;
+      this.adj_nodes[u] = remove2(this.adj_nodes[u], v);
+      this.adj_nodes[v] = remove2(this.adj_nodes[v], u);
+    }
+  }
+}
+
+
 
 ////////////////////////////Breadth First search///////////////////////////
 // input: graph, a simple Graph
@@ -290,5 +507,6 @@ const Quicksort = function (array){
   quicksort_helper(array,0,array.length-1, steps, comps);
   return [array,comps, steps]
 }
+}
 
-export {BreadthFirstSearch, BreadthFirstSearchPaths, DepthFirstSearch,DepthFirstSearchPaths, BinarySearch, Mergesort, Quicksort};
+export {random_color, equiv, inobj, inarr, remove,remove1,remove2, SimpleGraph, WeightedGraph, BreadthFirstSearch, BreadthFirstSearchPaths, DepthFirstSearch,DepthFirstSearchPaths, BinarySearch, Mergesort, Quicksort};
