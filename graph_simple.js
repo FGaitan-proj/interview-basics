@@ -1,133 +1,7 @@
+import * as A from "./algorithms.js";
 /*
-User Interface aspect of creating a simple graph and 
-this file also contains the simple graph class
+User Interface aspect of creating a simple graph
 */
-
-/************************Graph Class & Other Functions********************/
-// input: x,y are arrays of two elements
-// return: true iff x and y both exactly the same elements
-const equiv = function (x,y) {
-  let [a,b] = x;
-  let [c,d] = y;
-  return ((a===c && b===d) || (b===c && a===d))
-}
-
-// input: x, a variable and xs, an dictionary
-// output: true if x is in xs and false otherwise
-const inobj = function (x,xs) {
-  let ans = false;
-  Object.keys(xs).forEach(element => {
-    if (element === x) {ans = true};
-  });
-  return ans
-}
-
-// input: x, a variable and xs, an dictionary
-// output: true if x is in xs and false otherwise
-const inarr = function (x,xs) {
-  let ans = false;
-  xs.forEach(element => {
-    if (equiv(element,x)) {ans = true};
-  })
-  return ans
-}
-
-//removes an element from an array of ints through regular iteration
-const remove = function (x,ls){
-  let ret = [];
-  let n = ls.length;
-  for (let i = 0; i < n; i++) {
-    if (ls[i] != x) {
-      ret.push(ls[i])
-    }
-  }
-  return ret
-}
-
-//removes an two element array from an array depending on the first 
-//element in the two element array through iteration
-const remove2 = function (x,ls){
-  let ret = [];
-  let n = ls.length;
-  for (let i = 0; i < n; i++) {
-    let y = ls[i]
-    if (!equiv(x,y)) {
-      ret.push(ls[i])
-    }
-  }
-  return ret
-}
-
-//Different random colors for each graph
-var colors = ["#E49175;","#DF8C70;", "#E9967A;", "#DA876B;",
-"#D58266;", "#D07D61;", "#CB785C;", "#C67357;", "#C16E52;", "#BC694D;",
-"#B76448;", "#B25F43;", "#AD5A3E;", "#F5A286;", "#FFAE92;", "#FFBA9E;",
-"#FFC6AA;", "#FFD2B6;", "#FFDEC2;", "#FFEACE;", "#FFF6DA;", "#FFFFE6;",
-"#FFFFF2;", "#FFFFFE;", "#FFFFFF;", "#E9C37D;", "#F5CF89;", "#FFDB95;",
-"#F5A7EB;", "#FFB357;"]
-
-// input: colorArray, array of colors ids
-// returns: a single color id
-const random_color = function (colorArray){
-  let n = Math.floor(Math.random() * colorArray.length);
-  return colors[n]
-}
-
-// An undirected simple graph with n nodes and e edges
-class Graph {
-  constructor(n){
-    this.nodes = n; //nodes
-    this.edges = []; //edges
-    this.adj_nodes = []; //array that maps node to list of adjacent nodes
-    for (var i=0; i<n; i+=1){
-      this.adj_nodes.push([]);
-    }
-  }
-
-  //returns: total nodes
-  nodes(){
-    return this.nodes;
-  }
-
-  //returns: total edges
-  edges(){
-    return this.edges;
-  }
-
-  //returns: adjacent nodes of v
-  neighbors(v){
-    return this.adj_nodes[v]
-  }
-
-  //u, v: int
-  //precondition: 0 <= u,v < this.nodes
-  //returns: bool, True iff an edge (u,v) exists
-  is_edge(u,v){
-    return this.adj_nodes[u].some(element => element == v);
-  }
-
-  //u,v: int
-  //precondition: 0 <= u,v < this.nodes
-  //if u!=v and they are not already connected, adds an edge (u,v)
-  add_edge(u,v){ 
-    if (u != v && !this.is_edge(u,v)){
-      this.edges.push([u,v]);
-      this.adj_nodes[u].push(v); // adds (u,v)
-      this.adj_nodes[v].push(u); // adds (v,u)
-    }
-  }
-
-  //u, v: int
-  //precondition: 0 <= u,v < this.nodes
-  //Removes the undirected edge (u,v) is it exists
-  remove_edge(u,v){
-    if (this.is_edge(u, v)){
-      this.edges = remove2([u,v],this.edges);
-      this.adj_nodes[u] = remove(this.adj_nodes[u], v);
-      this.adj_nodes[v] = remove(this.adj_nodes[v], u);
-    }
-  }
-}
 
 /************************Graph Algorithms Set up**********************/
 const node_input = document.querySelector(".GNode");
@@ -146,7 +20,7 @@ node_input.addEventListener("change", (event) => {
 //Changes label to current input
 label_input.addEventListener("change", (event) => {
   label = event.target.value;
-  if (inobj(label,graph_ls)) {
+  if (A.inobj(label,graph_ls)) {
     document.querySelector(".lbl").innerHTML = label
     document.querySelector(".N1").max = graph_ls[label].nodes-1;
     document.querySelector(".N2").max = graph_ls[label].nodes-1;
@@ -219,7 +93,7 @@ function change_edges(graph, node) {
 
   //Verifies validity of edge before adding to specified graph
   add_button.addEventListener("click", () => {
-    if (inobj(label,graph_ls)){
+    if (A.inobj(label,graph_ls)){
       if (graph.className === label) { 
         let s_graph = graph_ls[label];
         s_graph.add_edge(n1,n2);
@@ -233,7 +107,7 @@ function change_edges(graph, node) {
 
   //Verifies validity of edge before removing from specified graph
   rem_button.addEventListener("click", () => {
-    if (inobj(label,graph_ls)){
+    if (A.inobj(label,graph_ls)){
       if (graph.className === label) { 
         let s_graph = graph_ls[label]; 
         s_graph.remove_edge(n1,n2);
@@ -273,7 +147,7 @@ function printnode(node) {
 
 //Creates the visual Graph and appends to site
 makeg_button.addEventListener("click", () => {
-  if (inobj(label, graph_ls)) {
+  if (A.inobj(label, graph_ls)) {
     //Alerts user the graph name is already in use
     window.alert("Graph Name already in use");
 
@@ -285,7 +159,7 @@ makeg_button.addEventListener("click", () => {
   } else {
 
     //make p tag element with a random color
-    let col = random_color(colors);
+    let col = A.random_color();
     let graph = document.createElement("div");
     graph.setAttribute("class", label);
     graph.setAttribute("style","background-color:"+col);
@@ -306,7 +180,7 @@ makeg_button.addEventListener("click", () => {
     All_graphs.appendChild(graph);
 
     //add label to global list
-    graph_ls[label] = new Graph(node);
+    graph_ls[label] = new A.SimpleGraph(node);
     
     // add button for edges and to changes edges 
     if (!edges) {make_edges(node-1);};
@@ -324,4 +198,4 @@ makeg_button.addEventListener("click", () => {
   }
 })
 
-export {graph_ls,inarr,inobj, Graph, All_graphs};
+export {graph_ls, All_graphs};
