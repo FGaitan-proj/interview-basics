@@ -507,6 +507,5 @@ const Quicksort = function (array){
   quicksort_helper(array,0,array.length-1, steps, comps);
   return [array,comps, steps]
 }
-}
 
 export {random_color, equiv, inobj, inarr, remove,remove1,remove2, SimpleGraph, WeightedGraph, BreadthFirstSearch, BreadthFirstSearchPaths, DepthFirstSearch,DepthFirstSearchPaths, BinarySearch, Mergesort, Quicksort};
