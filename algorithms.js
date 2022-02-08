@@ -20,7 +20,8 @@ const random_color = function (){
 // input: x,y are arrays of two elements
 // return: true iff x and y both exactly the same elements
 // TODO make it so that its for everything
-const equiv = function (x,y) {
+const equiv = function (x,y) 
+{
   let [a,b] = x;
   let [c,d] = y;
   return ((a===c && b===d) || (b===c && a===d))
@@ -28,9 +29,11 @@ const equiv = function (x,y) {
 
 // input: x, a variable and xs, an dictionary
 // output: true if x is in xs and false otherwise
-const inobj = function (x,xs) {
+const inobj = function (x,xs) 
+{
   let ans = false;
-  Object.keys(xs).forEach(element => {
+  Object.keys(xs).forEach(element => 
+  {
     if (element === x) {ans = true};
   });
   return ans
@@ -38,20 +41,25 @@ const inobj = function (x,xs) {
 
 // input: x, a variable and xs, an dictionary
 // output: true if x is in xs and false otherwise
-const inarr = function (x,xs) {
+const inarr = function (x,xs) 
+{
   let ans = false;
-  xs.forEach(element => {
-    if (equiv(element,x)) {ans = true};
-  })
+  xs.forEach(element => 
+             {
+              if (equiv(element,x)) {ans = true};
+              })
   return ans  
 }
 
 //removes an element from an array of ints through regular iteration
-const remove = function (x,ls){
+const remove = function (x,ls)
+{
   let ret = [];
   let n = ls.length;
-  for (let i = 0; i < n; i++) {
-    if (ls[i] != x) {
+  for (let i = 0; i < n; i++) 
+  {
+    if (ls[i] != x) 
+    {
       ret.push(ls[i])
     }
   }
@@ -59,12 +67,15 @@ const remove = function (x,ls){
 }
 
 //removes a single element from an array of ints through regular iteration
-const remove1 = function (x,ls){
+const remove1 = function (x,ls)
+{
   let ret = [];
   let n = ls.length;
   let once = false;
-  for (let i = 0; i < n; i++) {
-    if ((ls[i] != x) || once) {
+  for (let i = 0; i < n; i++) 
+  {
+    if ((ls[i] != x) || once) 
+    {
       ret.push(ls[i])
     } else {
       once = true;
@@ -75,11 +86,14 @@ const remove1 = function (x,ls){
 
 //removes an two element array from an array depending on the first 
 //element in the two element array through iteration
-const remove2 = function (x,ls){
+const remove2 = function (x,ls)
+{
   let ret = [];
   let n = ls.length;
-  for (let i = 0; i < n; i++) {
-    if (ls[i].shift() != x) {
+  for (let i = 0; i < n; i++) 
+  {
+    if (ls[i].shift() != x) 
+    {
       ret.push(ls[i])
     }
   }
@@ -88,42 +102,50 @@ const remove2 = function (x,ls){
 
 // An undirected simple graph with n nodes and e edges
 class SimpleGraph {
-  constructor(n){
+  constructor(n)
+  {
     this.nodes = n; //nodes
     this.edges = []; //edges
     this.adj_nodes = []; //array that maps node to list of adjacent nodes
-    for (var i=0; i<n; i+=1){
+    for (var i=0; i<n; i+=1)
+    {
       this.adj_nodes.push([]);
     }
   }
 
   //returns: total nodes
-  nodes(){
+  nodes()
+  {
     return this.nodes;
   }
 
   //returns: total edges
-  edges(){
+  edges()
+  {
     return this.edges;
   }
 
   //returns: adjacent nodes of v
-  neighbors(v){
+  neighbors(v)
+  {
     return this.adj_nodes[v]
   }
 
   //u, v: int
   //precondition: 0 <= u,v < this.nodes
   //returns: bool, True iff an edge (u,v) exists
-  is_edge(u,v){
+  is_edge(u,v)
+  {
     return this.adj_nodes[u].some(element => element == v);
   }
 
   //u,v: int
   //precondition: 0 <= u,v < this.nodes
   //if u!=v and they are not already connected, adds an edge (u,v)
-  add_edge(u,v){ 
-    if (u != v && !this.is_edge(u,v)){
+  add_edge(u,v)
+  { 
+    if (u != v && !this.is_edge(u,v))
+    {
       this.edges.push([u,v]);
       this.adj_nodes[u].push(v); // adds (u,v)
       this.adj_nodes[v].push(u); // adds (v,u)
@@ -133,8 +155,10 @@ class SimpleGraph {
   //u, v: int
   //precondition: 0 <= u,v < this.nodes
   //Removes the undirected edge (u,v) is it exists
-  remove_edge(u,v){
-    if (this.is_edge(u, v)){
+  remove_edge(u,v)
+  {
+    if (this.is_edge(u, v))
+    {
       this.edges = A.remove2([u,v],this.edges);
       this.adj_nodes[u] = A.remove1(this.adj_nodes[u], v);
       this.adj_nodes[v] = A.remove1(this.adj_nodes[v], u);
@@ -144,22 +168,26 @@ class SimpleGraph {
 
 // An undirected weighted graph with n nodes and e edges
 class WeightedGraph {
-  constructor(n){
+  constructor(n)
+  {
     this.nodes = n; //nodes
     this.edges = 0; //edges
     this.adj_nodes = []; //array that maps node to list of adjacent nodes
-    for (let i=0; i<n; i+=1){
+    for (let i=0; i<n; i+=1)
+    {
       this.adj_nodes.push([]);
     }
   }
   
   //returns: total nodes
-  nodes(){
+  nodes()
+  {
     return this.nodes;
   }
 
   //returns: total edges
-  edges(){
+  edges()
+  {
     return this.edges;
   }
 
@@ -171,10 +199,13 @@ class WeightedGraph {
   //u, v: int
   //precondition: 0 <= u,v < this.edges
   //returns: bool, True iff an edge (u,v) exists
-  is_edge(u,v){
+  is_edge(u,v)
+  {
     var ls = this.adj_nodes[u];
-    for (var i=0;i<ls.length; i+=1){
-      if (v == ls[i].shift()){
+    for (var i=0;i<ls.length; i+=1)
+    {
+      if (v == ls[i].shift())
+      {
           return true;
       }
     }
@@ -184,10 +215,13 @@ class WeightedGraph {
   //u, v: int
   //precondition: 0 <= u,v < this.edges
   //returns: int, the weight of the edge or undefined
-  weight (u,v){
+  weight (u,v)
+  {
     var ls = this.adj_nodes[u];
-    for (var i=0;i<ls.length; i+=1){
-      if (v == ls[i].shift()){
+    for (var i=0;i<ls.length; i+=1)
+    {
+      if (v == ls[i].shift())
+      {
           return ls[i].pop();
       }
     }
@@ -198,8 +232,10 @@ class WeightedGraph {
   //w: float, edge weight
   //precondition: 0 <= u,v < this.edges
   //if u!=v and they are not already connected, adds an edge (u,v)
-  add_edge(u,v, w){ 
-    if (u != v && !this.is_edge(u,v)){
+  add_edge(u,v, w)
+  { 
+    if (u != v && !this.is_edge(u,v))
+    {
       this.edges+=1;
       this.adj_nodes[u].push([v,w]); // adds (u,v)
       this.adj_nodes[v].push([u,w]); // adds (v,u)
@@ -209,8 +245,10 @@ class WeightedGraph {
   //u, v: int
   //precondition: 0 <= u,v < this.edges
   //Removes the undirected edge (u,v) is it exists
-  remove_edge(u,v){
-    if (this.is_edge(u, v)){
+  remove_edge(u,v)
+  {
+    if (this.is_edge(u, v))
+    {
       this.edges-=1;
       this.adj_nodes[u] = remove2(this.adj_nodes[u], v);
       this.adj_nodes[v] = remove2(this.adj_nodes[v], u);
@@ -225,20 +263,25 @@ class WeightedGraph {
 //        s, an int source node label
 //        g, an int goal node label
 // returns: a list of explored nodes
-const BreadthFirstSearch = function (graph, s, g){
+const BreadthFirstSearch = function (graph, s, g)
+{
   let Que = [];
   let Explored = [];
   Que.push(s);
-  while (Que.length != 0) {
+  while (Que.length != 0) 
+  {
     let v = Que.pop()
-    if (v == g) {
+    if (v == g) 
+    {
       return Explored
     }
     Explored.push(v);
     let neigh = graph.neighbors(v);
-    for (let i = 0; i < neigh.length; i++) {
+    for (let i = 0; i < neigh.length; i++) 
+    {
       let w = neigh[i];
-      if (!Explored.some(x => w == x)) {
+      if (!Explored.some(x => w == x)) 
+      {
         Que.push(w);
       }
     }
@@ -251,41 +294,47 @@ const BreadthFirstSearch = function (graph, s, g){
 //        of first path that breadthfirst search finds, 
 //        path[i][1] is the number of paths of that length
 //        path[i][2] is the first path found
-const BreadthFirstSearchPaths = function (graph,s) {
+const BreadthFirstSearchPaths = function (graph,s) 
+{
   let Nodes = graph.nodes;
   let path = [];
   let Que = [s];
 
   //defines all nodes at not searched as well as setting number of
   //paths to 0
-  for (let i=0;i<Nodes;i+=1){
+  for (let i=0;i<Nodes;i+=1)
+  {
     path.push([-1,0,[s]]);
   }
   path[s] = [0,1,[s]];
 
   //searches through Que
-  while(Que.length != 0) {
+  while(Que.length != 0) 
+  {
     let v = Que.pop();
     let ls = graph.neighbors(v);
-    for (let j=0;j<ls.length; j+=1){
+    for (let j=0;j<ls.length; j+=1)
+    {
       let w = ls[j];
       let [v1,v2, v3] = path[v]; //current node info
       let [w1,w2, w3] = path[w]; //neighbor node info
-      if (w1 == -1) {
-        //adding to length of path or declaring as explored
-        let w1 = v1 + 1;
+      if (w1 == -1) 
+        {
+          //adding to length of path or declaring as explored
+          let w1 = v1 + 1;
 
-        //adding to previous path
-        let x = v3.slice();
-        x.push(w);
+          //adding to previous path
+          let x = v3.slice();
+          x.push(w);
 
-        //redefining value of path[w]
-        path[w] = [w1,v2,x];
-        Que.push(w);
-      }
-      if (w1 == v1 + 1){
-        path[w] = [w1,v2+w2, w3];
-      }
+          //redefining value of path[w]
+          path[w] = [w1,v2,x];
+          Que.push(w);
+        }
+      if (w1 == v1 + 1)
+        {
+          path[w] = [w1,v2+w2, w3];
+        }
     }
   }
   return path
@@ -455,7 +504,8 @@ const Mergesort = function (array){
 //        low, an int
 //        high, an int 
 // output: an int of the last
-const partition = function (array, low, high) {
+const partition = function (array, low, high) 
+{
   let comp = [];
   let pivot = array[low];
   let i = low; let j = high;
@@ -484,8 +534,10 @@ const partition = function (array, low, high) {
 //        low, an int
 //         high, an int
 // returns: a sorted array, as well as a list of steps in sorting
-const quicksort_helper = function (array,low,high, step, allcoms) {
-  if (low < high) {
+const quicksort_helper = function (array,low,high, step, allcoms) 
+{
+  if (low < high) 
+  {
     step.push(array.map((x)=>x));
 
     let part = partition(array,low,high)
@@ -501,7 +553,8 @@ const quicksort_helper = function (array,low,high, step, allcoms) {
 
 // input: array, an unsorted array with no repeats
 // returns: a sorted array,a list of steps in sorting, and a list of comparisons
-const Quicksort = function (array){
+const Quicksort = function (array)
+{
   let steps = [];
   let comps = [];
   quicksort_helper(array,0,array.length-1, steps, comps);
