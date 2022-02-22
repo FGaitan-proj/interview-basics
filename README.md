@@ -11,8 +11,13 @@ graph_simple.js - contains the code that allows for construction and editing of 
 
 HTML files:
 index.html - frontend of the homepage
+
 binary.html
+
 breadth.html
+
 depth.html
+
 merge.html
+
 quick.html
