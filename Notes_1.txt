@@ -1,0 +1,466 @@
+<script>
+// in-line comment
+var number = 5 + 10;
+/* this is a multiline comment */
+/*datatypes:
+undefined, null, boolean, string, symbol, number, and object */
+var a; //var is global, this form is undefined
+let OurName = "j"; //let within scope
+const Ourname = "kaj"; //const can never change
+number++; //increment
+number--; //increment
+number+= 10;
+number-= 10;
+var str = "hi ahhhhh\" my\" ahhhhh";
+var str0 = 'hi ahhhhh" my" ahhhhh';
+var str1 = `'hi ahhhhh" my" ahhhhh'`;
+var name = window.prompt("Enter Graph name: ");
+document.write(name + " SimpleGraph");
+function Print(u){
+  document.write(u)
+}
+let newDiv = document.createElement("div");
+let content = document.createTextNode("1<br>1");
+newDiv.appendChild(content);
+// let newEdge = document.createElement("div");
+// newEdge.innerHTML = this.printn[n1] + "----" + this.printn[n2]
+// let edgeInput = document.getElementById("EdgesInput");
+// document.body.insertBefore(newEdge,edgeInput);
+/*
+\' single quote
+\" double
+\\ backslash
+\n newline
+\r carriage return
+\t tab
+\b backspace
+\f form feed
+*/
+//https://www.geeksforgeeks.org/introduction-object-oriented-programming-javascript/
+//https://websitesetup.org/wp-content/uploads/2020/09/Javascript-Cheat-Sheet.pdf
+//https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
+//https://www.youtube.com/watch?v=kwfoEb0-DQI
+//Have it call class from a diff file
+//have BFS for weighted graph, directed graph, and simplegraph
+// let name = document.getElementById("GName").value;
+// let edges = document.getElementById(name);
+// if (edges != null){
+//   let [graph,edges1] = this.graphdict[name];
+//
+// } else {
+//   window.alert("Graph Name Not Defined");
+// }
+// let g1 = new SimpleGraph(5);
+// g1.add_edge(0,1);
+// g1.add_edge(0,2);
+// g1.add_edge(0,3);
+// g1.add_edge(1,3);
+// g1.add_edge(1,4);
+// let b = g1.is_edge(0,1);
+// let b1 = g1.is_edge(0,2);
+// let c = g1.nodes_adj(0);
+// let s = BreadthFirstSearch(g1,1);
+// console.log("hello World");
+// console.log(number);
+console.log("https://www.youtube.com/watch?v=PkZNo7MFNFg");
+/*
+def count_shortest_paths(graph, s):
+  """
+  graph: Graph
+  s: int, source node label
+  returns: list, a list xs where xs[i] is the number of shortest paths
+  from s to i
+  """
+  dist = BFS(graph,s)
+  return [b for (a,b) in dist]
+
+*/
+/*# BFS Counting Shortest paths and weight graph search
+# Fernando Gaitan
+# due: April 20, 11:55pm
+
+from collections import deque # regular queue
+
+
+class Graph(object):
+  """
+  An undirected simple graph of n nodes, V = {0, 1, ..., n-1} represented using an adj. list
+  """
+  def __init__(self, n):
+      """
+      n: int, a positive integer
+      """
+      self.n = n # number of nodes
+      self.m = 0 # number of edges
+      self.node_to_neis = [] # lists that maps every node to its list of neighbors
+      for i in range(n):
+          self.node_to_neis.append([])
+
+  def number_of_nodes(self):
+      return self.n
+
+  def number_of_edges(self):
+      return self.m
+
+  def is_edge(self, u, v):
+      """
+      u, v: int, node labels
+      precondition: 0 <= u,v < self.n
+      returns: bool, True iff an edge (u,v) exists
+      """
+      return v in self.node_to_neis[u]
+
+  def add_edge(self, u, v):
+      """
+      u, v: int, node labels
+      precondition: 0 <= u,v < self.n
+      returns: None. Adds an undirected (u,v) if u!=v and they are not already connected
+      """
+      if u != v and not self.is_edge(u, v):
+          self.m = self.m + 1
+          self.node_to_neis[u].append(v) # add (u,v)
+          self.node_to_neis[v].append(u) # add (v,u)
+
+  def remove_edge(self, u, v):
+      """
+      u, v: int, node labels
+      precondition: 0 <= u,v < self.n
+      returns: None. Removes the undirected edge (u,v) is it exists
+      """
+      if self.is_edge(u, v):
+          self.m = self.m - 1
+          self.node_to_neis[u].remove(v) # remove(u,v)
+          self.node_to_neis[v].remove(u) # remove(v,u)
+
+  def get_neighbors(self, u):
+      """
+      u: int, node label
+      precondition: 0 <= u < self.n
+      returns: list, a list of nodes v such that (u,v) exists
+      """
+      return self.node_to_neis[u]
+
+
+
+# BFS implemented in class
+def BFS(graph, s):
+  n = graph.number_of_nodes()
+  dist = [ (-1,0) for i in range(n) ]
+  dist[s] = (0,1)
+  Q = deque([s])
+  while Q:
+      v = Q.popleft()
+      for w in graph.get_neighbors(v):
+          (w1,w2) = dist[w]
+          (v1,v2) = dist[v]
+          if w1 == -1:
+              w1 = v1 + 1
+              dist[w] = (w1,v2)
+              Q.append(w)
+          if w1 == v1 + 1:
+              dist[w] = (w1,v2+w2)
+  return dist
+
+
+
+g = Graph(9)
+g.add_edge(0,1)
+g.add_edge(0,2)
+g.add_edge(0,3)
+g.add_edge(2,4)
+g.add_edge(3,4)
+g.add_edge(4,5)
+g.add_edge(5,6)
+g.add_edge(5,7)
+g.add_edge(6,8)
+g.add_edge(7,8)
+print(count_shortest_paths(g, 0))
+
+
+g = Graph(11)
+g.add_edge(0,1)
+g.add_edge(0,2)
+g.add_edge(0,3)
+g.add_edge(1,4)
+g.add_edge(2,4)
+g.add_edge(3,4)
+g.add_edge(4,5)
+g.add_edge(5,6)
+g.add_edge(5,7)
+g.add_edge(6,8)
+g.add_edge(7,8)
+g.add_edge(0,9)
+g.add_edge(9,10)
+g.add_edge(10,4)
+print(count_shortest_paths(g, 0))
+
+
+class WeightedGraph(object):
+  """
+  An undirected, weighted, simple graph of n nodes, V = {0, 1, ..., n-1} represented using an adj. list
+  """
+  def __init__(self, n):
+      """
+      n: int, a positive integer
+      """
+      self.n = n # number of nodes
+      self.m = 0 # number of edges
+      self.node_to_neis = [] # lists that maps every node to its list of neighbors
+      for i in range(n):
+          self.node_to_neis.append([])
+
+  def number_of_nodes(self):
+      return self.n
+
+  def number_of_edges(self):
+      return self.m
+
+  def is_edge(self, u, v):
+      """
+      u, v: int, node labels
+      precondition: 0 <= u,v < self.n
+      returns: bool, True iff an edge (u,v) exists
+      """
+      for node,weight in self.node_to_neis[u]:
+          if node == v:
+              return True
+      return False
+
+  def add_edge(self, u, v, w):
+      """
+      u, v: int, node labels
+      w: float, edge weight
+      precondition: 0 <= u,v < self.n
+      returns: None. Adds an undirected edge (u,v) with weight w if u!=v and they are not already connected
+      """
+      if u != v and not self.is_edge(u, v):
+          self.m = self.m + 1
+          self.node_to_neis[u].append((v,w))
+          self.node_to_neis[v].append((u,w))
+
+  def remove_edge(self, u, v):
+      """
+      u, v: int, node labels
+      precondition: 0 <= u,v < self.n
+      returns: None. Removes the undirected edge (u,v) is it exists
+      """
+      for node,w in self.node_to_neis[u]:
+          if node == v:
+              self.node_to_neis[u].remove((v,w))
+              self.node_to_neis[v].remove((u,w))
+              self.m = self.m - 1
+
+  def get_neighbors(self, u):
+      """
+      u: int, node label
+      precondition: 0 <= u < self.n
+      returns: list, a list of nodes v such that (u,v) exists
+      """
+      return self.node_to_neis[u] # this returns a list of tuples
+
+def BFS_og(graph, s):
+  """
+  graph: Graph
+  s: int, source node label
+  returns: list, a list of distances, dist[i] = length of shortest path from s to i
+  """
+  n = graph.number_of_nodes()
+  dist = [ -1 for i in range(n) ]
+  dist[s] = 0
+  Q = deque([s])
+  while Q:
+      v = Q.popleft()
+      for w in graph.get_neighbors(v):
+          if dist[w] == -1:
+              dist[w] = dist[v] + 1
+              Q.append(w)
+  return dist
+
+
+def weighted_shortest_paths(graph, s):
+  """
+  graph: WeightedGraph, an undirected weighted graph with positive integer weights
+  s: int, source node label
+  returns: list, a list of distances, dist[i] = length of weighted shortest path from s to i
+  Complexity: O(m+n+K) where K is the maximum edge weight in the
+  original graph because the initial for loop creates a list by checking
+  all the edge weights, so we see all nodes and all edges atleast once.
+  Since we construct weight-1 edges for every edge weight greater than 1,
+  we also add that into our complexity. Creating the graph and calling
+  BFS_og takes no more than O(n + m + K), so it would not be larger than
+  O(m+n+K).
+  """
+  # Create a list of lists with list[i] is the neighbor of that node
+  nodes = graph.n
+  Nodelist = [[] for _ in range(nodes)]
+  upNodes = nodes
+  for u in range(graph.n):
+      neis = graph.get_neighbors(u)
+      for (nei,w) in neis:
+          if w == 1:
+              Nodelist[u].append(nei)
+              Nodelist[nei].append(u)
+          else:
+              for i in range(w):
+                  if i == 0:
+                      Nodelist[u].append(upNodes)
+                      Nodelist.append([u])
+                      upNodes += 1
+                  elif i < w-1:
+                      Nodelist[upNodes-1].append(upNodes)
+                      Nodelist.append([upNodes-1])
+                      upNodes += 1
+                  else:
+                      Nodelist[nei].append(upNodes-1)
+                      Nodelist[upNodes-1].append(nei)
+
+  # Create a graph with the same edges as the previous node
+  G = Graph(len(Nodelist))
+  for node in range(len(Nodelist)):
+      for nei in Nodelist[node]:
+          G.add_edge(nei,node)
+  # Go through unweighted Graph
+  return BFS_og(G,s)[:nodes]
+
+g = WeightedGraph(4)
+g.add_edge(0,1,6)
+g.add_edge(1,3,1)
+g.add_edge(0,2,1)
+g.add_edge(2,3,1)
+print(weighted_shortest_paths(g, 0))
+
+# hw6.py
+# Fernando Gaitan
+# due: May 11, 11:55pm
+
+##Describe a directed weighted graph G = (V,E) with n nodes V = {1, 2, . . . , n}
+##such that at each iteration i, OPT(i,v) is updated for n − i nodes in the graph.
+##For example, say that we are running Bellman–Ford from source node 1. Then,
+##initially we have OPT(0,v) =0forv=1and∞foreveryothernodev>1. Atthefirstiteration,
+##wewantOPT(1,v)tobe updated for n-1 nodes. At the second iteration we want OPT(2,v)
+##to be updated for n-2 nodes and so on. Until the last iteration where only one
+##node is being updated. Describe a general graph (for a general n or at least
+##something that’s easily-generalizable) and the final distance to each node.
+##Note: the graph should NOT have a negative cycle.
+
+def find_closest(xs, stand):
+  """
+  returns: int, index of closest nonconflicting stand
+  """
+  if xs[0] > stand - 7:
+      return -1
+  lo = 0
+  hi = len(xs)
+  while lo < hi:
+      mid = (lo+hi)//2
+      if xs[mid] > stand - 7:
+          hi = mid
+      else:
+          lo = mid + 1
+  return hi-1
+
+def opt_locations(xs, s, M):
+  """
+  returns: list, a list of indices in the optimal solution based on M
+  """
+  opt_sol = []
+  j = len(xs)-1
+  while j >= 0:
+      if s[j] == -1:
+          with_j = xs[j]
+      else:
+          with_j = xs[j] + M[s[j]]
+
+      if j == 0:
+          without_j = 0
+      else:
+          without_j = M[j-1]
+
+      if with_j >= without_j:
+          opt_sol.append(j)
+          j = s[j]
+      else:
+          j = j - 1
+
+  return opt_sol
+
+
+def watermelon_stands(xs, rs):
+  """
+  xs: list, a list of possible stand locations (distances from the beginning
+  of the road)
+  rs: list, a list of profits made at each location
+  returns: list,int: a list of indices indicating a set of optimal locations
+  and the profit made by choosing these locations
+  """
+  n = len(xs)
+  s = [ -1 for _ in range(n)]
+  M = [ -1 for _ in range(n)]
+  M[0] = rs[0]
+  for j in range(n):
+      s[j] = find_closest(xs, xs[j])
+
+  i = 1
+  while i < n:
+      if s[i] == -1:
+          with_i = rs[i]
+      else:
+          with_i = rs[i] + M[s[i]]
+      without_i = M[i-1]
+      M[i] = max(with_i, without_i)
+      i = i + 1
+
+  return opt_locations(rs, s, M), M[-1]
+
+
+
+# uncomment to test
+xs = [5, 7, 12, 15,27]
+rs = [5, 6, 5, 1,5]
+locations, profit = watermelon_stands(xs, rs)
+assert set(locations) == set([0,2,4]) # best solution obtained by choosing 0 and 2
+assert profit == 15 # profit of best solution = 10
+
+
+def watermelon_stocks(prices):
+  """
+  prices: list, list of daily watermelon stock price
+  returns: tuple, two indices i<j where i is the best day to buy and j in
+  the best day to sell
+  """
+  n = len(prices)
+  opt_v = [-1 for _ in range(n)]
+  idx = [-1 for _ in range(n)]
+  opt_v[0],idx[0] = 0,0
+  buy = prices[0]
+  sell = prices[0]
+  buy_id = 0
+
+  for i in range(1,n):
+      if prices[i] < buy:
+          buy_id = i
+          buy = prices[i]
+      idx[i] = buy_id
+
+  for j in range(1,n):
+      d = prices[j] - prices[idx[j]]
+      opt = opt_v[j-1]
+      if d > opt:
+          buy = idx[j]
+          sell = j
+          opt_v[j] = d
+      else:
+          opt_v[j] = opt
+
+  return buy,sell
+
+
+#uncomment to test
+buy,sell = watermelon_stocks([10, 15, 12, 6, 11, 10, 2, 10, 7, 11])
+assert buy == 6 and sell == 9 # best to buy when the price is 2 and sell when it's 11
+buy,sell = watermelon_stocks([10,11,7,10,6])
+assert buy == 2 and sell == 3 # best to buy when the price is 7 and sell when it's 10
+
+
+*/
+</script>

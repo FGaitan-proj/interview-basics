@@ -1,0 +1,481 @@
+<html lang="en">
+<body style="background-color:#d499bb;" >
+  <header>
+    <script type="module" src="index.js"></script>
+    <div class="topnav">
+      <a href="index.html">Home</a>
+      <a href="search.html">Search Algorithms</a>
+      <a href="sort.html">Sort Algorithms</a>
+    </div>
+    <p></p>
+    <h1> Search Algorithms </h1>
+  </header>
+  <strong>Graph Construction</strong>
+  <p>This page is designed to take a Name and a number to create a graph.
+    You can output edges and create more than one graph.
+    If you want to specify the changes to a specific graph, then you just
+    need to change the input for Graph Name and then the buttons that
+    adjust for edges should also change.
+  </p>
+  Label: <input type="text" class="GName" value="Simple" size="10"/>
+  <br> 
+  Nodes: <input type="number" class="GNode" value="5" min="1" max="1000000"/>
+  <p>
+    <button class="make_simplegraph">Make Graph</button>
+    <br>
+    <button class="start_search"> Start BreadthFirstSearch </button>
+  </p>
+  <div class="start_output" id="start" style="display:none">
+    <p>
+        Input the Label and the source node to produce the shortest
+        distance between the source node and all other nodes. They are in 
+        the form |y)--(x)--> node where x is the minimum distance and
+        y is the number paths with that distance
+    </p>
+    <center>
+    Graph Label: <input type="text" class="search_graph" size="10"/>
+    <br>
+    Source Node: <input type="number" class="search_source" min="0" value="0" max="1000000"/> 
+    <br>
+    Goal Node (optional): <input type="number" class="search_goal" min="0" value="0" max="1000000"/>
+    <br>
+    <button class="distance_button"> Distances </button>
+    <br>
+    <button class="path_button"> Breadth First Search Explored </button>
+    <br>
+    <button class="path_button"> Breadth First Search Path </button>
+    </center>
+  </div>
+  <div class="start_output" id="start" style="display:none">
+    <p>
+        Input the Label and the source node to produce the shortest
+        distance between the source node and all other nodes. They are in 
+        the form |y)--(x)--> node where x is the minimum distance and
+        y is the number paths with that distance
+    </p>
+    <center>
+    Graph Label: <input type="text" class="search_graph" size="10"/>
+    <br>
+    Source Node: <input type="number" class="search_source" min="0" value="0" max="1000000"/> 
+    <br>
+    Goal Node (optional): <input type="number" class="search_goal" min="0" value="0" max="1000000"/>
+    <br>
+    <button class="distance_button"> Distances </button>
+    <br>
+    <button class="bfspath_button"> Breadth First Search path </button>
+    <button class="dfspath_button"> Depth First Search path </button>
+    <button class="binpath_button"> Binary Search path </button>
+    </center>
+  </div>
+<style>
+.topnav {
+  background-color: #333;
+  float: right;
+}
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+</style>
+<script>
+
+////////////////////////////Simple Graph Class ///////////////////////////////
+class SimpleGraph {
+    // An undirected simple graph with n nodes and e edges
+    constructor(n){
+      this.nodes = n; //nodes
+      this.edges = 0; //edges
+      this.adj_nodes = []; //array that maps node to list of adjacent nodes
+      var i;
+      for (i=0; i<n; i+=1){
+        this.adj_nodes.push([]);
+      }
+    }
+    nodes_adj(u){
+      //u: int
+      //precondition: 0<= u < this.edges
+      //returns: arrary of adjacent nodes to u
+      return this.adj_nodes[u]
+    }
+    is_edge(u,v){
+      //u, v: int
+      //precondition: 0 <= u,v < this.edges
+      //returns: bool, True iff an edge (u,v) exists
+      var ls = this.adj_nodes[u];
+      for (var i=0;i<ls.length; i+=1){
+        if (v == ls[i]){
+            return true;
+        }
+      }
+      return false;
+    }
+    add_edge(u,v){
+      //u,v: int
+      //precondition: 0 <= u,v < this.edges
+      //if u!=v and they are not already connected, adds an edge (u,v)
+      if (u != v && !this.is_edge(u,v)){
+        this.edges+=1;
+        this.adj_nodes[u].push(v); // adds (u,v)
+        this.adj_nodes[v].push(u); // adds (v,u)
+      }
+    }
+    remove_edge(u,v){
+      //u, v: int
+      //precondition: 0 <= u,v < this.edges
+      //Removes the undirected edge (u,v) is it exists
+      if (this.is_edge(u, v)){
+        this.edges-=1;
+        this.adj_nodes[u].pop(v);
+        this.adj_nodes[v].pop(u);
+      }
+    }
+}
+
+/*
+User Interface aspect of creating a simple graph and 
+this file also contains the simple graph class
+TODO changes node max and label depending on
+*/
+
+const node_input = document.querySelector(".GNode");
+const label_input = document.querySelector(".GName");
+const makeg_button = document.querySelector(".make_simplegraph");
+const graph_ls = {};
+let node = node_input.value;
+let label = label_input.value;
+let edges = false;
+
+var colors = ["#E49175;","#DF8C70;", "#E9967A;", "#DA876B;",
+"#D58266;", "#D07D61;", "#CB785C;", "#C67357;", "#C16E52;", "#BC694D;",
+"#B76448;", "#B25F43;", "#AD5A3E;", "#F5A286;", "#FFAE92;", "#FFBA9E;",
+"#FFC6AA;", "#FFD2B6;", "#FFDEC2;", "#FFEACE;", "#FFF6DA;", "#FFFFE6;",
+"#FFFFF2;", "#FFFFFE;", "#FFFFFF;", "#E9C37D;", "#F5CF89;", "#FFDB95;",
+"#F5A7EB;", "#FFB357;"]
+
+// input: colorArray, array of colors ids
+// returns: a single color id
+const random_color = function (colorArray){
+  let n = Math.floor(Math.random() * colorArray.length);
+  return colors[n]
+}
+
+// input: x, a variable and xs, an dictionary
+// output: true if x is in xs and false otherwise
+const inobj = function (x,xs) {
+  let ans = false;
+  Object.keys(xs).forEach(element => {
+    if (element === x) {ans = true};
+  });
+  return ans
+}
+
+// input: x,y are arrays of two elements
+// return: true iff x and y both exactly the same elements
+const equiv = function (x,y) {
+  let [a,b] = x;
+  let [c,d] = y;
+  return ((a===c && b===d) || (b===c && a===d))
+}
+
+// input: x, a variable and xs, an dictionary
+// output: true if x is in xs and false otherwise
+const inarr = function (x,xs) {
+  let ans = false;
+  xs.forEach(element => {
+    if (equiv(element,x)) {ans = true};
+  })
+  return ans
+}
+
+//Changes number of nodes to current input
+node_input.addEventListener("change", (event) => {
+  node = event.target.value;
+})
+
+//Changes label to current input
+label_input.addEventListener("change", (event) => {
+  label = event.target.value;
+  if (inobj(label,graph_ls)) {
+    document.querySelector(".lbl").innerHTML = label
+    document.querySelector(".N1").max = graph_ls[label][0]-1;
+    document.querySelector(".N2").max = graph_ls[label][0]-1;
+  }
+})
+
+////////////////////////////Making and Changing Edges/////////////////////////////// 
+
+// input: node, an int representing number of nodes
+// returns: nothing, adds html for button to changes edges in html
+//                  as well as the button for BFS
+function make_edges(node) {
+  const edges_input = document.createElement("div");
+  edges_input.setAttribute("class","make_edges");
+  edges_input.innerHTML = `
+  <center>
+  Applying changes to <strong class="lbl"> ${label}</strong>.
+  <br>
+  Edges:
+    <input type="number" class="N1" min="0" max="${node}" value="0"/>
+    <input type="number" class="N2" min="0" max="${node}" value="0"/>
+    <br>
+    <button class="AEdges"> Add Edges </button>
+    <button class="REdges"> Remove Edges </button>
+  </center>
+  `;
+  document.body.insertBefore(edges_input, start);
+  edges = true;
+}
+
+function Pr(edges){
+  let printedges = [];
+  let i;
+  for (i=0;i<edges.length;i+=1){
+    let n1 = edges[i][0].toString();
+    let n2 = edges[i][1].toString();
+    printedges.push("o"+n1.sub()+" ---- o"+n2.sub());
+  }
+  return printedges;
+}
+
+// input: graph, a string name for a graph
+// return: nothing, allows functionality for add and remove buttons
+function change_edges(graph, node) {
+  const all_edges = document.createElement("div");
+  const add_button = document.querySelector(".AEdges");
+  const rem_button = document.querySelector(".REdges");
+  const node1_input = document.querySelector(".N1");
+  const node2_input = document.querySelector(".N2");
+  let n1 = node1_input.value;
+  let n2 = node2_input.value;
+  
+  //updates label
+  document.querySelector(".lbl").innerHTML = label
+
+  //updates n1 and n2 to current input and current max
+  node1_input.max = node;
+  node1_input.addEventListener("change", (event) => 
+  { n1 = event.target.value; })
+  node2_input.max = node;
+  node2_input.addEventListener("change", (event) => 
+  { n2 = event.target.value;})
+
+  //Verifies validity of edge before adding to specified graph
+  add_button.addEventListener("click", () => {
+    if (graph.className === label) { 
+      let edges = graph_ls[label][1];
+      if (n1 != n2 && !inarr([n1,n2], edges)) {
+        edges.push([n1,n2]);
+        all_edges.innerHTML = "Edges {"+ edges.length + "}: " + Pr(edges);
+      }
+      graph.appendChild(all_edges);
+    }
+  })
+
+  //Verifies validity of edge before removing from specified graph
+  rem_button.addEventListener("click", () => {
+    if (graph.className === label) { 
+      let edges = graph_ls[label][1]; 
+      if (inarr([n1,n2], edges)) {
+        let index = edges.findIndex(x => equiv(x,[n1,n2]));
+        if (index > -1) {
+          edges.splice(index, 1);
+        }
+        all_edges.innerHTML = Pr(edges);
+      }
+      graph.appendChild(all_edges);
+    }
+  })
+
+}
+
+////////////////////////////Making Graph Elements//////////////////////////
+//Make Graphs Elements in document
+const All_graphs = document.createElement("p");
+All_graphs.setAttribute("class","All_graphs");
+All_graphs.setAttribute("style", "height: 200px; overflow-y: scroll;");
+document.body.appendChild(All_graphs);
+
+// input: node, an int number of nodes 
+// output: returns array string representation of nodes
+function printnode(node) {
+  let printn = [];
+  let i = 0;
+  if (node <= 15) {
+    while (i < node){
+      let n = i.toString();
+      printn.push(" o"+ n.sub());
+      i++;
+    }
+  } else {
+    while (i < 10){
+      let n = i.toString();
+      printn.push(" o"+ n.sub());
+      i++;
+    } 
+    printn.push("... o"+ node.sub());
+  }
+  return printn
+}
+
+
+//Creates the visual Graph and appends to site
+makeg_button.addEventListener("click", () => {
+  if (inobj(label, graph_ls)) {
+    //Alerts user the graph name is already in use
+    window.alert("Graph Name already in use");
+
+  } else if (label === "") {
+
+    //Alerts user there is no graph name
+    window.alert("Please insert valid graph name");
+
+  } else {
+
+    //make p tag element with a random color
+    let col = random_color(colors);
+    let graph = document.createElement("div");
+    graph.setAttribute("class", label);
+    graph.setAttribute("style","background-color:"+col);
+
+    //adds text to constructed p tag
+    graph.innerHTML = `
+    <center>
+    &emsp;
+    ${label} Graph {${node}} 
+     <button class="del${label}" style="float: right;"> 
+     Delete 
+     </button> <br> 
+     &emsp; ${printnode(node)}
+    </center>
+    
+    `;
+
+    //adds p tag to page 
+    All_graphs.appendChild(graph);
+
+    //add label to global list
+    graph_ls[label] = [node, []];
+    
+    // add button for edges and to changes edges 
+    if (!edges) {make_edges(node-1);};
+    change_edges(graph, node-1);
+    
+    //autoscroll to bottom 
+    window.scrollTo(0,document.body.scrollHeight);
+
+    //
+    document.querySelector(".del"+label).addEventListener("click",
+    () => {
+      graph.innerHTML = "";
+      delete graph_ls[label];
+    })
+  }
+})
+
+
+////////////////////////////Making Graph Objects///////////////////////////
+//TODO fix delete bug
+const start_button = document.querySelector(".start_search");
+const distance_button = document.querySelector(".distance_button");
+const graph_input = document.querySelector(".search_graph");
+const source_input = document.querySelector(".search_source");
+const label_input = document.querySelector(".GName");
+const content = document.querySelector(".start_output");
+let label = label_input.value;
+let bfslabel = label;
+let source = source_input.value;
+
+//Updates current label
+label_input.addEventListener("change", (event) => { 
+    label = event.target.value;
+})
+
+//Updates current graph label  
+graph_input.addEventListener("change", (event) => {
+    bfslabel = event.target.value;
+})
+
+//Updates current source node  
+source_input.addEventListener("change", (event) => {
+    source = event.target.value;
+})
+
+
+//Ouputs Graph Label and Source Node input
+start_button.addEventListener("click", (event) => 
+{
+    if (Object.keys(Simple.graph_ls).length === 0) {
+        window.alert("Please make a graph first")
+    } else {
+        content.style.display = "block";
+        graph_input.value = label;
+    }
+    //let node_edges = graph_ls[label];
+    //source_input.setAttribute("max", nodes);
+})
+
+// input: dist, an array of two length arrays
+// output: a string of arrows going telling you the shortest distance
+// from the source to every other node along with how many paths exist 
+// of that distance
+const sourcetonode = function (dist, source){
+    let output = " Source node: o"+ source.toString().sub() + "<br>";
+    let i = 0;
+    while (i < dist.length) {
+        if (dist[i][0] != -1){
+            let k = i.toString()
+            output+= "&emsp; |--("+dist[i][0]+")--> o"+k.sub();
+
+            if ((i % 14) == 0 && i != 0) {
+                output+="<br>"
+            }
+            }
+        i++
+    }
+    return output
+}
+
+//input: graph, a graph type 
+//       arr, an array with two element arrays
+//output: a graph with edges of the values in arr
+const add_edges = function (graph, arr) {
+    arr.forEach((element) => 
+    {let [a,b] = element;
+    graph.add_edge(a,b);})
+    return graph
+}
+
+//outputs the distance from the source node to each node using the 
+// given algorithm
+distance_button.addEventListener("click",() => 
+{
+    if (Simple.inobj(bfslabel,Simple.graph_ls)) {
+        let [nodes,es] = Simple.graph_ls[bfslabel]
+        let docgraph = document.querySelector("."+bfslabel);
+        let edges = document.createElement("div");
+
+        if (nodes >= source) {
+            let g = new Simple.Graph(nodes)
+            let graph = add_edges(g,es);
+            let dist = BreadthFirstSearch(graph, source);
+
+            edges.innerHTML = sourcetonode(dist, source);
+            docgraph.appendChild(edges);
+        } else {
+            window.alert(source.toString() + " node is not a valid node\
+            \nPlease add a valid node or no edges attached to graph")
+        }
+    } else {
+        window.alert("Graph Label Input not a valid Label");
+    }
+})
+
+//export {graph_ls,inarr,inobj};
+
+</script>
+</body>
+</html>

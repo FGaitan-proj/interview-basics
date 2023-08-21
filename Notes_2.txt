@@ -1,0 +1,343 @@
+Course Title: JavaScript Essential Training
+
+Description: JavaScript is a scripting language of the web. As the web evolves from a static to a dynamic environment, technology focus is shifting from static markup and styling—frequently handled by content management systems or automated scripts—to dynamic interfaces and advanced interaction. Once seen as optional, JavaScript is now becoming an integral part of the web, infusing every layer with its script.Through practical examples and mini-projects, this course helps you build your understanding of JavaScript piece by piece, from core principles like variables, data types, conditionals, and functions through advanced topics including loops, and DOM scripting. Along the way, instructor Morten Rand-Hendriksen provides challenges that allow you to put your new skills to the test.
+
+
+***********************************************
+Chapter: 5. DOM
+***********************************************
+
+
+-----------------------------------------------
+Video: Access elements with querySelector methods
+-----------------------------------------------
+Note Time:         Note Text:                     
+
+0:05:34            document.querySelector("**") => where ** is the name of the <>, for example ** = main for <main> ...</main> and you can use the name ** = .class_name for <main class= class_name> ...</main>  and you can do something like ** = main li:last-child ; this is for in the console 
+
+0:06:05            document.querySelectAll("**"+"li") where ** is the name of list <> and there is a .forEach where you can iterate through. For example, .forEach(item => item.style.backgroundColor="blue"). If you can do CSS queries, you can do this? 
+
+
+-----------------------------------------------
+Video: Practice: Find an element
+-----------------------------------------------
+Note Time:         Note Text:                     
+
+0:00:13            .getElemenstByClassName("**") => gives an array and you can have ** be two names and it would elements in both; .getElementsbyId => gets single element ; these are both old 
+
+
+-----------------------------------------------
+Video: Attributes
+-----------------------------------------------
+Note Time:         Note Text:                     
+
+0:00:06            .className => the property that is dangerous; .classList => has set of functions that .add or .remove or .toggle or .replace(old,new); .className is just for string n no changing 
+
+0:03:03            .attributes => has dedicated methods, but rlly is just used to get list of stuff  ; .hasAttribute("**") => false or true; .getAttribute("**") => returns value of specific attribute; .setAttribute("*title*", "*description*") => creates attribute 
+
+
+-----------------------------------------------
+Video: Inline style
+-----------------------------------------------
+Note Time:         Note Text:                     
+
+0:03:48            .style => tells you current and changeable properties; style.color => defines it and is changeable; 
+
+
+-----------------------------------------------
+Video: Add DOM elements
+-----------------------------------------------
+Note Time:         Note Text:                     
+
+0:03:38            when you wanna add HTML to the original page without going into .js file, you can have .js file not be as destructive and use new = .createElement("**") => for example ** = article; .classList.add("***") ; .setAttribute("****","*****"); .innerHTML = content; Parentnode.append(new) or .prepend for at the beginning or appendChild for returning value or replaceChild or insertBefore or insertAdjacentElement  
+
+
+***********************************************
+Chapter: 6. Sidebar: Variables and Data Types
+***********************************************
+
+
+-----------------------------------------------
+Video: Assignment vs. comparison
+-----------------------------------------------
+Note Time:         Note Text:                     
+
+0:00:24            typeof ** => a function that outputs type of ** 
+
+
+-----------------------------------------------
+Video: Math operators
+-----------------------------------------------
+Note Time:         Note Text:                     
+
+0:00:01            a ** b => a^b ; --15 = 14 ; 14++ = 14(output), then when called again its 15; be careful with operations between strings and numbers!! because 4 + "4" = 44 
+
+0:00:07            === is an absolute equivalence and == is regular comparison so, 5 === "5" is false but 5 == "5" is true 
+
+
+***********************************************
+Chapter: 7. Arrays
+***********************************************
+
+
+-----------------------------------------------
+Video: Array methods
+-----------------------------------------------
+Note Time:         Note Text:                     
+
+0:02:20            if array = {0,1,2,3,4,5}can change array[9] = ** even if array[7] is undefined 
+
+
+***********************************************
+Chapter: 8. Functions and Methods
+***********************************************
+
+
+-----------------------------------------------
+Video: Functions and methods
+-----------------------------------------------
+Note Time:         Note Text:                     
+
+0:03:16            use const name = function (a,b) {}; instead of function name(a,b){}; 
+
+
+-----------------------------------------------
+Video: The arrow function
+-----------------------------------------------
+Note Time:         Note Text:                     
+
+0:04:02            (**) => {} is an arrow function with input ** 
+
+
+-----------------------------------------------
+Video: Practice: Build a function
+-----------------------------------------------
+Note Time:         Note Text:                     
+
+0:00:20            arrow functions dont carry their own scrope and grab from global 
+
+
+-----------------------------------------------
+Video: Conditional if...else statement
+-----------------------------------------------
+Note Time:         Note Text:                     
+
+0:05:11            shorthand for if-else : (bool ? return_true : return_false) 
+
+
+-----------------------------------------------
+Video: Logical operators
+-----------------------------------------------
+Note Time:         Note Text:                     
+
+0:03:21            && - and ; || - or             
+
+
+-----------------------------------------------
+Video: Conditional switch statement
+-----------------------------------------------
+Note Time:         Note Text:                     
+
+0:05:26            switch (expr) { case **: *** break; ...; default: **** } 
+
+
+-----------------------------------------------
+Video: Looping through content
+-----------------------------------------------
+Note Time:         Note Text:                     
+
+0:02:27            for (let i = 0 l i < lenght; i++) {} 
+
+0:03:08            for (const item of array){} => for as long as there is an item in the array 
+
+
+-----------------------------------------------
+Video: Using the map() array method
+-----------------------------------------------
+Note Time:         Note Text:                     
+
+0:00:02            for (const obj in nestedObjects) {} ; => iterate through an object 
+
+0:00:02            array.forEach((item) => {}) => iterate through an array 
+
+0:02:53            array.map(function) => applies function to each member of array 
+
+
+***********************************************
+Chapter: 9. Events
+***********************************************
+
+
+-----------------------------------------------
+Video: Typical DOM events
+-----------------------------------------------
+Note Time:         Note Text:                     
+
+0:03:21            button = document.querySelector(".cta-button") with button.addEventListener("click", function, output) 
+
+0:03:33            event.pageX or .pageY gives the position of the mouse 
+
+
+-----------------------------------------------
+Video: Practice: Experiment with event listeners
+-----------------------------------------------
+Note Time:         Note Text:                     
+
+0:00:05            target.addEventListener("mdn reference", callback function, false or left blank ) 
+
+
+***********************************************
+Chapter: 10. Troubleshooting and Validating JS
+***********************************************
+
+
+-----------------------------------------------
+Video: Troubleshooting JavaScript in the browser
+-----------------------------------------------
+Note Time:         Note Text:                     
+
+0:04:04            in developer tools -> sources -> page ; then click on number and you can add break line where is pauses the code 
+
+
+-----------------------------------------------
+Video: Making sense of a React component
+-----------------------------------------------
+Note Time:         Note Text:                     
+
+0:03:00            import React from "react; import PropTypes form "prop-types"; const imgWithClick = { cursor: "pointer" } ==> is just used to import content from other files 
+
+0:04:29            can have arrow functions in methods in react 
+
+Scrap 
+-----------------------------------------------
+<header>
+    <!-- <script scr="script.js" async></script> -->
+    <!-- <script scr="script.js" defer></script> -->
+<\header>
+
+  <div id="BFSlabel" style="display:none">
+    <p>
+      Input the Label and the source node to produce the shortest
+      distance between the source node and all other nodes.
+    </p>
+    Graph Label:
+      <input type="text" id="BFSgraph"/>
+    <br>
+    Source Node:
+      <input type="number" id="BFSsource" min="0" value="0"/>
+
+    <button onclick="BFSsearch()"> Search </button>
+  </div>
+
+const the_new_title = "BFS"
+
+const content =
+  `<main>
+    <article>
+      <h1>${the_new_title}</h1>
+    <\article>
+  <\main>
+  `;
+
+document.body.innterHTML = content;
+  // const input_atts =  
+  //   {"min":"0", "value":"0", "max":node.toString(), "type":"number"};
+
+  // const edge_one = document.createElement("input");
+  // edges_input.appendChild(edge_one);
+  // setAtts(edge_one,input_atts);
+
+  // const edge_two = document.createElement("input");
+  // edges_input.appendChild(edge_two);
+  // setAtts(edge_two,input_atts);
+
+  // const add_button = document.createElement("button");
+  // add_button.innerHTML = "Add Edges"
+  // edges_input.appendChild(add_button);
+
+
+  // const remove_button = document.createElement("button");
+  // remove_button.innerHTML = "Remove Edges"
+  // edges_input.appendChild(remove_button);
+    <div class="EdgesInput" style="display:none">
+    Edges:
+      <input type="number" id="N1" min="0" value="0"/>
+      <input type="number" id="N2" min="0" value="0"/>
+      <button id="AEdges" onclick="AddEdges()">
+        Add Edges
+      </button>
+      <button id="REdges" onclick="RemoveEdges()">
+        Remove Edges
+      </button>
+      <p>
+      <button onclick="StartBFS()"> Start BreadthFirstSearch </button>
+      </p>
+  </div>
+
+  /*
+  Graph Classes
+*/
+
+
+//export default SimpleGraph;
+//to call it in another file use: import SimpleGraph from "./Graphs.js"
+
+// input: element, an HTML element 
+//        values, an array of attributes and their respective
+//                values
+// returns: nothing
+function setAtts(element, values) {
+  for(var k in values) {
+    element.setAttribute(k, values[k]);
+  }
+}
+
+//determines equivalence of two arrays 
+const equiv = function(x,y) {
+  let one = x;
+  let two = y;
+  if (one.length == 0 && two.length == 0) {
+    return true
+  }
+  if (one.pop() != two.pop()) {
+    return false
+  } else {
+    return equiv(one,two);
+  }
+}
+
+const BreadthFirstSearchPaths = function (graph,s) {
+  let Nodes = graph.nodes;
+  let Dist = [];
+  let Que = [s];
+
+  //defines all nodes at not searched as well as setting number of
+  //paths to 0
+  for (let i=0;i<Nodes;i+=1){
+    Dist.push([-1,0]);
+  }
+  Dist[s] = [0,1];
+
+  //searches through Que
+  while(Que.length != 0) {
+    let v = Que.pop();
+    let ls = graph.neighbors(v);
+    for (let j=0;j<ls.length; j+=1){
+      let w = ls[j];
+      let w1,w2,v1,v2;
+      [w1,w2] = Dist[w];
+      [v1,v2] = Dist[v];
+      if (w1 == -1) {
+        let w1 = v1 + 1;
+        Dist[w] = [w1,v2];
+        Que.push(w);
+      }
+      if (w1 == v1 + 1){
+        Dist[w] = [w1,v2+w2];
+      }
+    }
+  }
+  return Dist
+}
+
+&emsp; => tabs
